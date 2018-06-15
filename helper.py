@@ -35,8 +35,8 @@ def is_valid(node_pos, obstacles):
     flag = 1
     for obs in obstacles:
         x1, y1, x2, y2 = obs
-        if(node_pos[0] < x2+0.01 and node_pos[0] > x1-0.01):
-            if(node_pos[1] < y2+0.01 and node_pos[1] > y1-0.01):
+        if(node_pos[0] < x2 and node_pos[0] > x1):
+            if(node_pos[1] < y2 and node_pos[1] > y1):
                 flag = 0
                 return flag
     return flag
@@ -110,6 +110,6 @@ def get_robust_shortest_paths(G, src, goal, K):
 
             G = remove_one_edge(G, src, goal)
         except Exception as e:
-            print(e)    
+            # print(e)    
             path_nodes_all.append([-1])
     return list(chain.from_iterable(path_nodes_all))

@@ -4,14 +4,16 @@ import random
 import networkx as nx
 import helper
 import visualise_training_data
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 
-rx1 = [1, 6]
-rx2 = [None, 8]
-rx3 = [1, 8]
+rx1 = [2, 12]
+rx2 = [None, 16]
+rx3 = [2, 16]
 
-ry1 = [1, 8]
-ry2 = [4, 9]
-ry3 = [1, None]
+ry1 = [2, 16]
+ry2 = [8, 18]
+ry3 = [2, None]
 
 EDGE_DISCRETIZATION = 11
 
@@ -23,7 +25,7 @@ def path_exists(src, goal, G):
         paths = nx.dijkstra_path(G, src, goal, weight='weight')
         return 1
     except Exception as e:
-        print("Invalid start-goal-------------------------------------------------------------------")
+        # print("Invalid start-goal-------------------------------------------------------------------")
         return 0    
 
 def state_to_numpy(state):
@@ -47,39 +49,39 @@ def is_trivial(start, goal, obstacles):
 
 def get_obstacles_posns():
     x1 = random.randint(rx1[0], rx1[1])
-    rx2[0] = x1+2
+    rx2[0] = x1+4
 
     x2 = random.randint(rx2[0], rx2[1])
     x3 = random.randint(rx3[0], rx3[1])
 
     y1 = random.randint(ry1[0], ry1[1])
     y2 = random.randint(ry2[0], ry2[1])
-    ry3[1] = y2-2
+    ry3[1] = y2-4
 
     y3 = random.randint(ry3[0], ry3[1])
 
-    x1/=10.0
-    x2/=10.0
-    x3/=10.0
-    y1/=10.0
-    y2/=10.0
-    y3/=10.0
+    x1/=20.0
+    x2/=20.0
+    x3/=20.0
+    y1/=20.0
+    y2/=20.0
+    y3/=20.0
     obs1 = (0, y1, x1, y1+0.1)
-    obs2 = (x1+0.1, y1, x2, y1+0.1)
-    obs3 = (x2+0.1, y1, 1, y1+0.1)
+    obs2 = (x1+0.05, y1, x2, y1+0.1)
+    obs3 = (x2+0.05, y1, 1, y1+0.1)
 
     obs4 = (x3, y2, x3+0.1, 1)
-    obs5 = (x3, y3, x3+0.1, y2-0.1)
-    obs6 = (x3, 0, x3+0.1, y3-0.1)
+    obs5 = (x3, y3, x3+0.1, y2-0.05)
+    obs6 = (x3, 0, x3+0.1, y3-0.05)
 
     return [obs1, obs2, obs3, obs4, obs5, obs6]
 
 def get_occ_grid(obstacles):
-    occ_grid1 = np.ones((10,10), dtype=int)
-    eps = 0.05
-    for i in range(0,10):
-        for j in range(0, 10):
-            if(not (helper.is_valid((i/10.0+eps,j/10.0+eps), obstacles))):
+    occ_grid1 = np.ones((20,20), dtype=int)
+    eps = 0.025
+    for i in range(0,20):
+        for j in range(0, 20):
+            if(not (helper.is_valid((i/20.0+eps,j/20.0+eps), obstacles))):
                 occ_grid1[i,j] = 0
             else:
                 occ_grid1[i,j] = 1
@@ -148,7 +150,7 @@ def is_in_collision(prev_posn, curr_posn, obstacles):
 def get_path_nodes(shallow_G1, dense_G1, start_n, goal_n, obstacles):
     c_path_nodes = []
 
-    threshold = 0.12
+    threshold = 0.05
 
     prev = 'o'+start_n
     prev_posn = state_to_numpy(shallow_G1.node[prev]['state'])
@@ -231,7 +233,19 @@ def get_path_nodes(shallow_G1, dense_G1, start_n, goal_n, obstacles):
         c_path_nodes = ['-1']            
     return c_path_nodes
 
-
+def plot_occ_grid(occ_grid):
+    fig1 = plt.figure(figsize=(10,6), dpi=80)
+    ax1 = fig1.add_subplot(111, aspect='equal')
+    for i in range(20):
+        for j in range(20):
+            if(occ_grid[i,j]==0):
+                ax1.add_patch(patches.Rectangle(
+                (j/20.0, i/20.0),   # (x,y)
+                0.05,          # width
+                0.05,          # height
+                alpha=0.6
+                ))
+    plt.show()            
 
 def main():
     random.seed(1000)
@@ -242,16 +256,17 @@ def main():
 
     occ_grid = []
     all_path_nodes = []
-    no_env = 20
-    no_pp = 5
+    no_env = 100
+    no_pp = 50
     no_paths = 5
     knn = 10
 
     for n in range(no_env):
-        print("env_no = ",n)
+        print("----------------------------------------------env_no = ",n)
         dense_G1 = dense_G.copy()
         shallow_G1 = shallow_G.copy()
         obstacles = get_obstacles_posns()
+        print("obstacles = ", obstacles)
         occ_grid1 = get_occ_grid(obstacles)
         dense_G1 = helper.remove_invalid_edges(dense_G1, obstacles)
 
@@ -274,6 +289,9 @@ def main():
                             start_nodes.append(start_n)
                             goal_nodes.append(goal_n)
                             occ_grid.append(occ_grid1)
+                            # print("occ_grid = ", occ_grid1.reshape(20,20))
+                            # plot_occ_grid(occ_grid1.reshape(20,20))
+                            # return
                             flag = True
                             path_nodes = get_path_nodes(shallow_G1, dense_G1, start_n, goal_n, obstacles)
                             all_path_nodes.append(path_nodes)

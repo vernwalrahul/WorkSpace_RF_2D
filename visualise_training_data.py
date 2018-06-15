@@ -41,12 +41,12 @@ def plot_it(G, src_nodes, goal_nodes, occ_grid, pp_no):
     goal = state_to_numpy(G.node[str(goal_nodes[pp_no])]['state'])
     fig1 = plt.figure(figsize=(10,6), dpi=80)
     ax1 = fig1.add_subplot(111, aspect='equal')
-    occ_grid1 = occ_grid[pp_no].reshape(10,10)
-    for i in range(10):
-        for j in range(10):
+    occ_grid1 = occ_grid[pp_no].reshape(20,20)
+    for i in range(20):
+        for j in range(20):
             if(occ_grid1[i,j]==0):
                 ax1.add_patch(patches.Rectangle(
-                (i/10.0, j/10.0),   # (x,y)
+                (i/20.0, j/20.0),   # (x,y)
                 0.1,          # width
                 0.1,          # height
                 alpha=0.6
@@ -64,6 +64,14 @@ def main():
 
     parser = argparse.ArgumentParser(description='Generate environments')
     parser.add_argument('--graphfile',type=str,required=True)
+
+    shallow_halton = nx.read_graphml("graphs_2d/shallow_graph.graphml")
+    shallow_nodes = []
+    for node in list(shallow_halton.nodes()):
+        shallow_nodes.append(state_to_numpy(shallow_halton.node[node]['state']))
+
+    shallow_nodes = np.array(shallow_nodes)
+
     args = parser.parse_args()
 
     G = nx.read_graphml(args.graphfile)
@@ -82,24 +90,25 @@ def main():
     occ_grid = []
     print("shape = ", occ_grid_temp.shape)
     for i in range(occ_grid_temp.shape[0]):
-        occ_grid.append(occ_grid_temp[i].reshape(10,10))
+        occ_grid.append(occ_grid_temp[i].reshape(20,20))
     print("occ_grid["+str(pp_no)+"] : ")
     print(occ_grid[pp_no])
     
 
     fig1 = plt.figure(figsize=(10,6), dpi=80)
     ax1 = fig1.add_subplot(111, aspect='equal')
-    for i in range(10):
-        for j in range(10):
+    for i in range(20):
+        for j in range(20):
             if(occ_grid[pp_no][i,j]==0):
                 ax1.add_patch(patches.Rectangle(
-                (j/10.0, i/10.0),   # (x,y)
-                0.1,          # width
-                0.1,          # height
+                (j/20.0, i/20.0),   # (x,y)
+                0.05,          # width
+                0.05,          # height
                 alpha=0.6
                 ))
 
-    print("node_posns = ", node_posns)            
+    print("node_posns = ", node_posns)    
+    plt.scatter(shallow_nodes[:,1], shallow_nodes[:,0], color = "blue", s = 10)        
     plt.scatter(node_posns[:,1], node_posns[:,0], color = "green", s = 30)
     plt.scatter(src[1], src[0], color = "red",  s = 100, edgecolors="black")
     plt.scatter(goal[1], goal[0], color = "blue",  s = 100, edgecolors="black")
