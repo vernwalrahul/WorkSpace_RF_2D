@@ -256,8 +256,8 @@ def main():
 
     occ_grid = []
     all_path_nodes = []
-    no_env = 100
-    no_pp = 50
+    no_env = 1
+    no_pp = 5
     no_paths = 5
     knn = 10
 

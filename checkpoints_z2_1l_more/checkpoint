@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/vernwalrahul/projects/Workspace_halton_2d/checkpoints_z2_1l_more/model.ckpt"
+all_model_checkpoint_paths: "/home/vernwalrahul/projects/Workspace_halton_2d/checkpoints_z2_1l_more/model.ckpt"

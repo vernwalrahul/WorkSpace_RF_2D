@@ -33,10 +33,11 @@ def edge_to_configs(state1, state2):
 
 def is_valid(node_pos, obstacles):
     flag = 1
+    eps = 0.01
     for obs in obstacles:
         x1, y1, x2, y2 = obs
-        if(node_pos[0] < x2 and node_pos[0] > x1):
-            if(node_pos[1] < y2 and node_pos[1] > y1):
+        if(node_pos[0] < x2 + eps and node_pos[0] > x1 - eps):
+            if(node_pos[1] < y2 + eps and node_pos[1] > y1 - eps):
                 flag = 0
                 return flag
     return flag

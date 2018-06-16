@@ -36,9 +36,7 @@ def get_positions(G, p_file_addr, pp_no):
 
     return array
 
-def plot_it(G, src_nodes, goal_nodes, occ_grid, pp_no):
-    src = state_to_numpy(G.node[str(src_nodes[pp_no])]['state'])
-    goal = state_to_numpy(G.node[str(goal_nodes[pp_no])]['state'])
+def plot_it(G, src_pos, goal_pos, node_posns, occ_grid):
     fig1 = plt.figure(figsize=(10,6), dpi=80)
     ax1 = fig1.add_subplot(111, aspect='equal')
     occ_grid1 = occ_grid[pp_no].reshape(20,20)
@@ -75,11 +73,12 @@ def main():
     args = parser.parse_args()
 
     G = nx.read_graphml(args.graphfile)
-    p_file_addr = "dataset/path_nodes.txt"
-    occ_grid_file_addr = "dataset/occ_grid.txt"
-    src_nodes = (np.loadtxt("dataset/start_nodes.txt", dtype = int))
-    goal_nodes = (np.loadtxt("dataset/goal_nodes.txt", dtype = int))
+    p_file_addr = "dataset_new/path_nodes.txt"
+    occ_grid_file_addr = "dataset_new/occ_grid.txt"
+    src_nodes = (np.loadtxt("dataset_new/start_nodes.txt", dtype = int))
+    goal_nodes = (np.loadtxt("dataset_new/goal_nodes.txt", dtype = int))
     pp_no = random.randint(0,len(src_nodes))
+    # pp_no = 43
     node_posns = np.array(get_positions(G, p_file_addr, pp_no))
     print("pp_no = ", pp_no)
     # print("src_nodes = ", src_nodes)
@@ -101,17 +100,19 @@ def main():
         for j in range(20):
             if(occ_grid[pp_no][i,j]==0):
                 ax1.add_patch(patches.Rectangle(
-                (j/20.0, i/20.0),   # (x,y)
+                (i/20.0,j/20.0),   # (x,y)
                 0.05,          # width
                 0.05,          # height
                 alpha=0.6
                 ))
 
     print("node_posns = ", node_posns)    
-    plt.scatter(shallow_nodes[:,1], shallow_nodes[:,0], color = "blue", s = 10)        
-    plt.scatter(node_posns[:,1], node_posns[:,0], color = "green", s = 30)
-    plt.scatter(src[1], src[0], color = "red",  s = 100, edgecolors="black")
-    plt.scatter(goal[1], goal[0], color = "blue",  s = 100, edgecolors="black")
+    # plt.scatter(shallow_nodes[:,1], shallow_nodes[:,0], color = "blue", s = 10) 
+    print("src = ",src)
+    print("goal = ",goal)       
+    plt.scatter(node_posns[:,0], node_posns[:,1], color = "green", s = 30)
+    plt.scatter(src[0], src[1], color = "red",  s = 100, edgecolors="black")
+    plt.scatter(goal[0], goal[1], color = "blue",  s = 100, edgecolors="black")
     plt.xlim(0,1)
     plt.ylim(0,1)
     plt.savefig(`pp_no`+'.jpg', bbox_inches='tight')
