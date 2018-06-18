@@ -103,14 +103,14 @@ if __name__ == "__main__":
     upper = numpy.ones(space_dim)
 
     # Settings
-    halton_points = 2000
+    halton_points = 100
     disc_radius = 2*halton_points**(-0.25)
 
     for i in range(1):
         print i
         numpy.random.seed()
         offset = numpy.random.random_sample(space_dim,)
-        riskmapFile = 'graphs_2d/halton' + `space_dim` + 'D' + `halton_points` + '_' + `i+1` + '.graphml'
+        riskmapFile = 'graphs/halton' + `space_dim` + 'D' + `halton_points` + '_' + `i+1` + '.graphml'
         # Example: halton2D2000_0.graphml
 
         # Generate the graph

@@ -1,0 +1,2 @@
+model_checkpoint_path: "/home/vernwalrahul/projects/WorkSpace_Hlaton_2D/checkpoints/model.ckpt"
+all_model_checkpoint_paths: "/home/vernwalrahul/projects/WorkSpace_Hlaton_2D/checkpoints/model.ckpt"
