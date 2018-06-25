@@ -106,6 +106,25 @@ def get_valid_start_goal(dense_G, obstacles, shallow_G_currP):
     
     return start_n, start, goal_n, goal, shallow_G_currP
 
+def append_to_files(start_nodes, goal_nodes, occ_grid, all_path_nodes):
+    assert (len(occ_grid)==len(start_nodes))
+    assert (len(all_path_nodes)==len(start_nodes))
+
+    try:
+        s_file = open("dataset_23June/start_nodes.txt",'ab')
+        g_file = open("dataset_23June/goal_nodes.txt",'ab')
+        occ_file = open("dataset_23June/occ_grid.txt", 'ab')
+    except:
+        print("File doesn't exist")
+        s_file = open("dataset_23June/start_nodes.txt",'w')
+        g_file = open("dataset_23June/goal_nodes.txt",'w')
+        occ_file = open("dataset_23June/occ_grid.txt", 'w')
+
+    np.savetxt(s_file, np.array(start_nodes), delimiter = " ", fmt = "%s")
+    np.savetxt(g_file, np.array(goal_nodes), delimiter = " ", fmt = "%s")
+    np.savetxt(occ_file, np.array(occ_grid), delimiter = " ", fmt = "%s")
+    helper.write_to_file("dataset_23June", all_path_nodes)
+
 def main():
     dense_G = nx.read_graphml("graphs/dense_graph.graphml")
     shallow_G = nx.read_graphml("graphs/shallow_graph.graphml")
@@ -160,13 +179,11 @@ def main():
             goal_nodes.append(goal_n)
             occ_grid.append(curr_occ_grid)
 
-    assert (len(occ_grid)==len(start_nodes))
-    assert (len(all_path_nodes)==len(start_nodes))
-
-    np.savetxt("dataset/start_nodes.txt", np.array(start_nodes), delimiter = " ", fmt = "%s")
-    np.savetxt("dataset/goal_nodes.txt", np.array(goal_nodes), delimiter = " ", fmt = "%s")
-    np.savetxt("dataset/occ_grid.txt", np.array(occ_grid), delimiter = " ", fmt = "%s")
-    helper.write_to_file("dataset", all_path_nodes)
-
+        if(n%100==0):
+            append_to_files(np.array(start_nodes), np.array(goal_nodes), np.array(occ_grid), all_path_nodes)
+            start_nodes = []
+            goal_nodes = []
+            occ_grid = []
+            all_path_nodes = []
 if __name__ == '__main__':
     main()

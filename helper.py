@@ -3,19 +3,18 @@ import networkx as nx
 import random
 import math
 
-rx1 = [1, 6]
-rx2 = [None, 8]
-rx3 = [1, 8]
+rx1 = [0, 6]
+rx2 = [None, 9]
+rx3 = [None, None]
 
-ry1 = [1, 8]
-ry2 = [4, 9]
-ry3 = [1, None]
+ry1 = [0, 7]
+ry2 = [None, 9]
 EDGE_DISCRETIZATION_T = 40
 EDGE_DISCRETIZATION = 11 
 THRESHOLD = 0.2
 
 def write_to_file(directory, all_paths):
-    with open(directory + "/path_nodes.txt", 'w') as file:
+    with open(directory + "/path_nodes.txt", 'a') as file:
         file.writelines(','.join(str(j) for j in i) + '\n' for i in all_paths)
         
 def calc_weight(config1, config2):
@@ -51,29 +50,28 @@ def get_obstacle_posns():
     rx2[0] = x1+2
 
     x2 = random.randint(rx2[0], rx2[1])
+
+    rx3[0], rx3[1] = x1+1, x2-1
     x3 = random.randint(rx3[0], rx3[1])
 
     y1 = random.randint(ry1[0], ry1[1])
-    y2 = random.randint(ry2[0], ry2[1])
-    ry3[1] = y2-2
 
-    y3 = random.randint(ry3[0], ry3[1])
+    ry2[0] = y1+1
+    y2 = random.randint(ry2[0], ry2[1])
 
     x1/=10.0
     x2/=10.0
     x3/=10.0
     y1/=10.0
     y2/=10.0
-    y3/=10.0
     obs1 = (0, y1, x1, y1+0.1)
     obs2 = (x1+0.1, y1, x2, y1+0.1)
     obs3 = (x2+0.1, y1, 1, y1+0.1)
 
-    obs4 = (x3, y2, x3+0.1, 1)
-    obs5 = (x3, y3, x3+0.1, y2-0.1)
-    obs6 = (x3, 0, x3+0.1, y3-0.1)
+    obs4 = (x3, y2+0.1, x3+0.1, 1)
+    obs5 = (x3, 0, x3+0.1, y2)
 
-    return [obs1, obs2, obs3, obs4, obs5, obs6]
+    return [obs1, obs2, obs3, obs4, obs5]
 
 #to check if a node is free
 def is_free(node_pos, obstacles):

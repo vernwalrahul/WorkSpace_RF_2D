@@ -52,11 +52,11 @@ def main():
     args = parser.parse_args()
 
     G = nx.read_graphml(args.graphfile)
-    p_file_addr = "dataset/path_nodes.txt"
-    occ_grid_file_addr = "dataset/occ_grid.txt"
-    src_nodes = (np.loadtxt("dataset/start_nodes.txt", dtype = int))
-    goal_nodes = (np.loadtxt("dataset/goal_nodes.txt", dtype = int))
-    pp_no = 36274
+    p_file_addr = "dataset_23June/path_nodes.txt"
+    occ_grid_file_addr = "dataset_23June/occ_grid.txt"
+    src_nodes = (np.loadtxt("dataset_23June/start_nodes.txt", dtype = int))
+    goal_nodes = (np.loadtxt("dataset_23June/goal_nodes.txt", dtype = int))
+    pp_no = random.randint(0, len(src_nodes)-1)
     # pp_no = 5
     node_posns = np.array(get_positions(G, p_file_addr, pp_no))
     print("pp_no = ", pp_no)
