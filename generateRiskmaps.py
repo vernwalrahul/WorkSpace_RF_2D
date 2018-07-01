@@ -103,10 +103,11 @@ if __name__ == "__main__":
     upper = numpy.ones(space_dim)
 
     # Settings
-    halton_points = 25
-    disc_radius = 2*halton_points**(-0.25)
+    h_points = [70, 140, 210, 280, 420, 560]
 
-    for i in range(1):
+    i = 0
+    for halton_points in h_points:
+        disc_radius = 4*halton_points**(-0.25)
         print i
         numpy.random.seed()
         offset = numpy.random.random_sample(space_dim,)
