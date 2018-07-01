@@ -28,9 +28,17 @@ def get_easy_pp(obstacles, start_posns, goal_posns, occ_grid, x1, x2, x3, y1, y2
 		if(random.randint(0,100)%2==0):
 			gx = x3 + 0.1 + random.random()*(0.9-x3)
 			gy = y1 + 0.1 + random.random()*(0.9-y1)
+
+			occ_grid[int((x1+0.05)*10)*10+int((y1+0.05)*10)] = 1
+			occ_grid[int((x2+0.05)*10)*10+int((y1+0.05)*10)] = 0
+			occ_grid[int((x3+0.05)*10)*10+int((y2+0.05)*10)] = 1
 		else:
 			gx = random.random()*x3
 			gy = random.random()*y1
+			
+			occ_grid[int((x3+0.05)*10)*10+int((y2+0.05)*10)] = 1
+			occ_grid[int((x2+0.05)*10)*10+int((y1+0.05)*10)] = 0
+			occ_grid[int((x1+0.05)*10)*10+int((y1+0.05)*10)] = 1
 
 		if(not (helper.is_free((sx, sy), obstacles) and helper.is_free((gx, gy), obstacles))):
 			continue
@@ -113,7 +121,7 @@ def main():
 
 		for p in range(no_pp):
 
-			start_posns, goal_posns, occ_grid = get_easy_pp(obstacles, start_posns, goal_posns, occ_grid, x1, x2, x3, y1, y2)
+			start_posns, goal_posns, curr_occ_grid = get_easy_pp(obstacles, start_posns, goal_posns, curr_occ_grid, x1, x2, x3, y1, y2)
 			occ_grid.append(curr_occ_grid)
 
 	start_posns = np.array(start_posns)
