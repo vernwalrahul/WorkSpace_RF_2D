@@ -1,2 +1,2 @@
-model_checkpoint_path: "/home/vernwalrahul/projects/Workspace_RF_2d/checkpoints_NS/model.ckpt"
-all_model_checkpoint_paths: "/home/vernwalrahul/projects/Workspace_RF_2d/checkpoints_NS/model.ckpt"
+model_checkpoint_path: "/home/vernwalrahul/UW_projects/WorkSpace_RF_2D/checkpoints_NS/model.ckpt"
+all_model_checkpoint_paths: "/home/vernwalrahul/UW_projects/WorkSpace_RF_2D/checkpoints_NS/model.ckpt"
