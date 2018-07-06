@@ -103,7 +103,7 @@ if __name__ == "__main__":
     upper = numpy.ones(space_dim)
 
     # Settings
-    h_points = [700, 840]
+    h_points = [750, 1000]
 
     i = 0
     for halton_points in h_points:
