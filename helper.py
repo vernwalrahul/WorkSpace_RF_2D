@@ -158,6 +158,19 @@ def connect_knn_for_one_node(G, K, node):
             break    
     return G
 
+#connect nodes within threshold
+def connect_within_thresh(G, lmbda, threshold,nodes_l):
+    for node in nodes_l:
+        conf1 = state_to_numpy(G.node[node]['state'])
+        for node1 in G.nodes():
+            conf2 = state_to_numpy(G.node[node1]['state'])
+
+            w = calc_weight(conf1, conf2)
+            if(w<threshold*lmbda):
+                G.add_edge(node, node1)
+                G[node][node1]['weight'] = w
+    return G
+
 #closest node to a point
 def find_closest_node(shallow_G1, node_posn):
     dist = 10000
